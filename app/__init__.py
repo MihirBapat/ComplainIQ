@@ -3,6 +3,7 @@
 from flask import Flask, render_template
 
 from config import Config
+from app.db import init_app
 
 
 def create_app(test_config=None):
@@ -11,6 +12,7 @@ def create_app(test_config=None):
     app.config.from_object(Config)
     if test_config:
         app.config.update(test_config)
+    init_app(app)
 
     @app.get("/")
     def index():
