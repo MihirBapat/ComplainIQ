@@ -222,4 +222,7 @@ __pycache__/
 *.py[cod]
 .venv/
 data/*.db
+data/raw/
+data/processed.csv
 ml/models/*.joblib
+ml/models/*.json
