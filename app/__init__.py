@@ -13,6 +13,12 @@ def create_app(test_config=None):
     if test_config:
         app.config.update(test_config)
     init_app(app)
+    from app.auth import bp as auth_bp
+    from app.routes.customers import bp as customers_bp
+    from app.routes.accounts import bp as accounts_bp
+    from app.routes.transactions import bp as transactions_bp
+    app.register_blueprint(auth_bp); app.register_blueprint(customers_bp)
+    app.register_blueprint(accounts_bp); app.register_blueprint(transactions_bp)
 
     @app.get("/")
     def index():

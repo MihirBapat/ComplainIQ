@@ -9,6 +9,7 @@
 <body class="bg-light">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary"><div class="container">
     <a class="navbar-brand" href="{{ url_for('index') }}">Complaint Analyzer</a>
+    {% if session.get('role') %}<div class="navbar-nav"><a class="nav-link" href="{{ url_for('customers.index') }}">Customers</a><a class="nav-link" href="{{ url_for('accounts.index') }}">Accounts</a><a class="nav-link" href="{{ url_for('transactions.index') }}">Transactions</a><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></div>{% endif %}
   </div></nav>
   <main class="container py-4">
     {% with messages = get_flashed_messages(with_categories=true) %}

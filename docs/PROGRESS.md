@@ -7,7 +7,7 @@
 - [x] 3. Data + ML — processed 15,000 balanced rows and trained TF-IDF + Logistic Regression: accuracy 0.9997, macro-F1 0.9997 (2026-10-20).
 - [x] 4. NLP service + fraud rules — `python -m pytest tests/test_nlp.py tests/test_rules.py -v`: 6 passed (2026-10-20).
 - [x] 5. Seed data — `python scripts/seed_db.py --reset`: 200 customers, 300 accounts, 5,003 transactions, 150 complaints; overview view returned 150 rows (2026-10-20).
-- [ ] 6. Auth + CRUD GUI
+- [ ] 6. Auth + CRUD GUI — in progress.
 - [ ] 7. Complaint workflow
 - [ ] 8. Dashboard + reports + model page
 - [ ] 9. Testing + documentation
