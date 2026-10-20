@@ -11,7 +11,7 @@
 - [x] 7. Complaint workflow — workflow routes and trigger integration implemented.
 - [x] 8. Dashboard + reports + model page — test suite passed.
 - [x] 9. Testing + documentation — test report and design documents added.
-- [ ] 10. Polish + final verification
+- [x] 10. Polish + final verification — `python -m pytest -v`: 10 passed; Flask test client returned HTTP 200 from `/` (2026-10-21).
 - [ ] 7. Complaint workflow
 - [ ] 8. Dashboard + reports + model page
 - [ ] 9. Testing + documentation
@@ -32,3 +32,4 @@
 | Date | Deviation | Reason / impact |
 |---|---|---|
 | 2026-10-20 | The supplied 5.6 GB CFPB CSV has no narrative column. `prepare_data.py` uses its real `Product`, `Issue`, and `Sub-issue` fields as the classifier text. | The plan's required narrative filter is impossible with this export. This is explicitly labelled in script output and documentation; model results must be interpreted as metadata-based, not free-text narrative performance. |
+| 2026-10-21 | `erd.png` was not exported. | Mermaid source is delivered; the optional CLI was not available in this environment. |

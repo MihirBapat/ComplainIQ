@@ -1,6 +1,4 @@
-# AgroPlan
-Crop Rotation Pattern Recognition and Planning using CSP
- # Fraud-Aware Transaction Complaint Analyzer
+# Fraud-Aware Transaction Complaint Analyzer
 
 ## Setup
 ```powershell
