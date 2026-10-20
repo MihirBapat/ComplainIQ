@@ -2,6 +2,6 @@
 {% block content %}
 <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
   <h1 class="display-6">Fraud-Aware Transaction Complaint Analyzer</h1>
-  <p class="lead mb-0">The application scaffold is running.</p>
+  <p class="lead">Operational dashboard</p><div class="row"><div class="col"><div class="card card-body">Open complaints: {{open_count}}</div></div><div class="col"><div class="card card-body">Pending flags: {{flags}}</div></div></div><table class="table mt-3"><tr><th>Category</th><th>Complaints</th><th>High urgency %</th></tr>{% for c in categories %}<tr><td>{{c.category_name}}</td><td>{{c.complaint_count}}</td><td>{{'%.1f'|format(c.high_urgency_percent)}}</td></tr>{% endfor %}</table>
 </div>
 {% endblock %}

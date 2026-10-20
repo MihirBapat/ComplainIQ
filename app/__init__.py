@@ -19,13 +19,17 @@ def create_app(test_config=None):
     from app.routes.transactions import bp as transactions_bp
     from app.routes.complaints import bp as complaints_bp
     from app.routes.fraud import bp as fraud_bp
+    from app.routes.reports import bp as reports_bp
+    from app.routes.model_info import bp as model_bp
     app.register_blueprint(auth_bp); app.register_blueprint(customers_bp)
     app.register_blueprint(accounts_bp); app.register_blueprint(transactions_bp)
     app.register_blueprint(complaints_bp); app.register_blueprint(fraud_bp)
+    app.register_blueprint(reports_bp); app.register_blueprint(model_bp)
 
     @app.get("/")
     def index():
-        return render_template("home.html")
+        from app.db import query_one, query_all
+        return render_template("home.html", open_count=query_one("SELECT COUNT(*) AS n FROM complaints WHERE status!='RESOLVED'")["n"], flags=query_one("SELECT COUNT(*) AS n FROM fraud_flags WHERE status='PENDING'")["n"], categories=query_all("SELECT * FROM v_category_stats"))
 
     @app.errorhandler(404)
     def not_found(error):
