@@ -17,8 +17,11 @@ def create_app(test_config=None):
     from app.routes.customers import bp as customers_bp
     from app.routes.accounts import bp as accounts_bp
     from app.routes.transactions import bp as transactions_bp
+    from app.routes.complaints import bp as complaints_bp
+    from app.routes.fraud import bp as fraud_bp
     app.register_blueprint(auth_bp); app.register_blueprint(customers_bp)
     app.register_blueprint(accounts_bp); app.register_blueprint(transactions_bp)
+    app.register_blueprint(complaints_bp); app.register_blueprint(fraud_bp)
 
     @app.get("/")
     def index():
