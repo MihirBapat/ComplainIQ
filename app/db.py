@@ -56,8 +56,12 @@ def init_db(app=None):
     connection = sqlite3.connect(db_path)
     try:
         connection.execute("PRAGMA foreign_keys = ON")
-        for filename in ("schema.sql", "indexes.sql", "triggers.sql", "views.sql"):
-            connection.executescript((SQL_DIR / filename).read_text(encoding="utf-8"))
+        exists = connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='account_types'"
+        ).fetchone()
+        if not exists:
+            for filename in ("schema.sql", "indexes.sql", "triggers.sql", "views.sql"):
+                connection.executescript((SQL_DIR / filename).read_text(encoding="utf-8"))
         connection.executemany("INSERT OR IGNORE INTO complaint_categories (name) VALUES (?)", [(x,) for x in FIXED_CATEGORIES])
         connection.commit()
     finally:
