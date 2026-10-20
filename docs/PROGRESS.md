@@ -5,7 +5,7 @@
 - [x] 1. Scaffold — `python run.py` served `/` successfully (HTTP 200, 2026-10-20).
 - [x] 2. Database — `python -m pytest tests/test_db.py -v`: 3 passed (2026-10-20).
 - [x] 3. Data + ML — processed 15,000 balanced rows and trained TF-IDF + Logistic Regression: accuracy 0.9997, macro-F1 0.9997 (2026-10-20).
-- [ ] 4. NLP service + fraud rules
+- [x] 4. NLP service + fraud rules — `python -m pytest tests/test_nlp.py tests/test_rules.py -v`: 6 passed (2026-10-20).
 - [ ] 5. Seed data
 - [ ] 6. Auth + CRUD GUI
 - [ ] 7. Complaint workflow
