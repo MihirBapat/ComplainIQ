@@ -1,0 +1,12 @@
+```mermaid
+erDiagram
+CUSTOMERS ||--o{ ACCOUNTS : owns
+ACCOUNT_TYPES ||--o{ ACCOUNTS : classifies
+ACCOUNTS ||--o{ TRANSACTIONS : has
+CUSTOMERS ||--o{ COMPLAINTS : files
+TRANSACTIONS ||--o{ COMPLAINTS : disputed_in
+COMPLAINT_CATEGORIES ||--o{ COMPLAINTS : tags
+TRANSACTIONS ||--o{ FRAUD_FLAGS : flagged
+COMPLAINTS ||--o{ FRAUD_FLAGS : triggers
+STAFF ||--o{ COMPLAINT_ACTIONS : performs
+```
