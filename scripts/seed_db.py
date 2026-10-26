@@ -52,7 +52,21 @@ def seed(reset=False):
     for account_id, amount, location in ((1, 25000, "London"), (2, 18000, "Dubai"), (3, 30000, "Singapore")):
         cursor.execute("INSERT INTO transactions (account_id, txn_type, amount, merchant, location) VALUES (?, ?, ?, ?, ?)", (account_id, "DEBIT", amount, "Injected anomaly", location))
     connection.commit(); connection.close()
-    processed = pd.read_csv(ROOT / "data" / "processed.csv").sample(n=150, random_state=42)
+    processed_path = ROOT / "data" / "processed.csv"
+    if processed_path.exists():
+        processed = pd.read_csv(processed_path)
+        processed = processed.sample(n=min(150, len(processed)), random_state=42)
+    else:
+        # This keeps the project demonstrable from a clean clone. The real CFPB
+        # pipeline can replace these samples with `ml/prepare_data.py` later.
+        samples = [
+            "There is an unauthorized card transaction on my account and I need it investigated immediately.",
+            "My bank account transfer is pending and I cannot access my money through the mobile application.",
+            "My credit card was charged twice for the same purchase and customer service has not helped.",
+            "The loan payment calculation and interest rate on my statement appear to be incorrect.",
+            "My credit report contains an account that does not belong to me and needs correction.",
+        ]
+        processed = pd.DataFrame({"text": (samples * 30)[:150]})
     from app.db import execute, query_one
     from app.services.nlp_service import predict
     with app.app_context():
@@ -65,6 +79,8 @@ def seed(reset=False):
             status = "IN_REVIEW" if result["confidence"] < 0.45 else "OPEN"
             execute("INSERT INTO complaints (customer_id, account_id, txn_id, complaint_text, status, category_id, confidence, sentiment_score, sentiment_label, urgency, model_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (accounts[account_id - 1][0], account_id, txn_id, row.text[:1000], status, category, result["confidence"], result["sentiment_score"], result["sentiment_label"], result["urgency"], result["model_id"]))
     print("Seeded 200 customers, 300 accounts, 5,003 transactions, and 150 complaints.")
+    if not processed_path.exists():
+        print("Used built-in demonstration complaint samples (no CFPB dataset/model found).")
     print("Demo credentials only: admin/admin123 and agent/agent123")
 
 

@@ -13,7 +13,14 @@ def index():
             flags=run_rules(cursor.lastrowid); flash("Transaction added." + (" Flags: "+", ".join(flags) if flags else ""),"success")
         except (ValueError, KeyError): flash("Enter a valid positive transaction amount.","danger")
         return redirect(url_for("transactions.index"))
-    account=request.args.get("account_id", ""); status=request.args.get("status", "")
-    sql="SELECT t.*,a.account_number FROM transactions t JOIN accounts a ON a.account_id=t.account_id WHERE (?='' OR t.account_id=?) AND (?='' OR t.status=?) ORDER BY t.txn_id DESC LIMIT 200"
-    rows=query_all(sql,(account,account,status,status))
-    return render_template("transactions/index.html", transactions=rows, accounts=query_all("SELECT account_id,account_number FROM accounts ORDER BY account_number"), selected_account=account, selected_status=status)
+    account = request.args.get("account_id", "")
+    status = request.args.get("status", "")
+    txn_type = request.args.get("txn_type", "")
+    date_from = request.args.get("date_from", "")
+    date_to = request.args.get("date_to", "")
+    sql = """SELECT t.*,a.account_number FROM transactions t JOIN accounts a ON a.account_id=t.account_id
+             WHERE (?='' OR t.account_id=?) AND (?='' OR t.status=?) AND (?='' OR t.txn_type=?)
+             AND (?='' OR date(t.txn_time)>=date(?)) AND (?='' OR date(t.txn_time)<=date(?))
+             ORDER BY t.txn_time DESC, t.txn_id DESC LIMIT 300"""
+    rows=query_all(sql,(account,account,status,status,txn_type,txn_type,date_from,date_from,date_to,date_to))
+    return render_template("transactions/index.html", transactions=rows, accounts=query_all("SELECT account_id,account_number FROM accounts ORDER BY account_number"), selected_account=account, selected_status=status, selected_type=txn_type, date_from=date_from, date_to=date_to)

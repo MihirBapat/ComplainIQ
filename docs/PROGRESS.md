@@ -7,15 +7,11 @@
 - [x] 3. Data + ML — processed 15,000 balanced rows and trained TF-IDF + Logistic Regression: accuracy 0.9997, macro-F1 0.9997 (2026-10-20).
 - [x] 4. NLP service + fraud rules — `python -m pytest tests/test_nlp.py tests/test_rules.py -v`: 6 passed (2026-10-20).
 - [x] 5. Seed data — `python scripts/seed_db.py --reset`: 200 customers, 300 accounts, 5,003 transactions, 150 complaints; overview view returned 150 rows (2026-10-20).
-- [x] 6. Auth + CRUD GUI — 10-test suite passed.
-- [x] 7. Complaint workflow — workflow routes and trigger integration implemented.
-- [x] 8. Dashboard + reports + model page — test suite passed.
+- [x] 6. Auth + CRUD GUI — account create/edit/delete and transaction filters verified (2026-10-26).
+- [x] 7. Complaint workflow — verified fraud complaint classification, HIGH urgency and trigger-created NLP flag (2026-10-26).
+- [x] 8. Dashboard + reports + model page — dark operations dashboard and route walkthrough passed (2026-10-26).
 - [x] 9. Testing + documentation — test report and design documents added.
-- [x] 10. Polish + final verification — `python -m pytest -v`: 10 passed; Flask test client returned HTTP 200 from `/` (2026-10-21).
-- [ ] 7. Complaint workflow
-- [ ] 8. Dashboard + reports + model page
-- [ ] 9. Testing + documentation
-- [ ] 10. Polish + final verification
+- [x] 10. Polish + final verification — `python -m pytest -v`: 10 passed; seeded route walkthrough and complaint workflow passed (2026-10-26).
 
 ## Weekly plan
 
