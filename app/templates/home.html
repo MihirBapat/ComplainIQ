@@ -1,7 +1,65 @@
 {% extends 'base.html' %}
+{% block title %}Overview · ComplainIQ{% endblock %}
+{% block section %}Overview{% endblock %}
 {% block content %}
-<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-  <h1 class="display-6">Fraud-Aware Transaction Complaint Analyzer</h1>
-  <p class="lead">Operational dashboard</p><div class="row"><div class="col"><div class="card card-body">Open complaints: {{open_count}}</div></div><div class="col"><div class="card card-body">Pending flags: {{flags}}</div></div></div><table class="table mt-3"><tr><th>Category</th><th>Complaints</th><th>High urgency %</th></tr>{% for c in categories %}<tr><td>{{c.category_name}}</td><td>{{c.complaint_count}}</td><td>{{'%.1f'|format(c.high_urgency_percent)}}</td></tr>{% endfor %}</table>
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">OPERATIONS OVERVIEW</p>
+    <h1>Good work starts with clarity.</h1>
+    <p>Review customer concerns and possible risk signals from one place.</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('complaints.new') }}">＋&nbsp; Submit a complaint</a>
 </div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-4">
+    <div class="metric-card">
+      <span class="metric-label">Open complaints</span>
+      <strong class="metric-value">{{ open_count }}</strong>
+      <div class="metric-note">Cases that still need attention</div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="metric-card metric-red">
+      <span class="metric-label">Pending fraud flags</span>
+      <strong class="metric-value">{{ flags }}</strong>
+      <div class="metric-note">Signals awaiting staff review</div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="metric-card metric-blue">
+      <span class="metric-label">Complaint categories</span>
+      <strong class="metric-value">{{ categories|length }}</strong>
+      <div class="metric-note">Topics used to organize cases</div>
+    </div>
+  </div>
+</div>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Complaint category overview</h2>
+      <p>Volume and high-urgency share across recorded cases.</p>
+    </div>
+    {% if session.get('role') %}<a class="btn btn-sm btn-outline-primary" href="{{ url_for('complaints.index') }}">View complaints&nbsp; →</a>{% endif %}
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead><tr><th>Category</th><th>Cases</th><th>Average sentiment</th><th>High urgency</th></tr></thead>
+      <tbody>
+        {% for c in categories %}
+          <tr>
+            <td class="fw-semibold">{{ c.category_name }}</td>
+            <td>{{ c.complaint_count }}</td>
+            <td>{% if c.avg_sentiment is not none %}{{ '%.2f'|format(c.avg_sentiment) }}{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+            <td><span class="status-badge {% if c.high_urgency_percent >= 50 %}status-disputed{% else %}status-active{% endif %}">{{ '%.1f'|format(c.high_urgency_percent) }}%</span></td>
+          </tr>
+        {% else %}
+          <tr><td class="table-empty" colspan="4">No category data is available yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+<div class="info-strip mt-3">AI-assisted categories and urgency are triage signals. Staff should review the complaint before making a decision.</div>
 {% endblock %}

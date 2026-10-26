@@ -1,1 +1,31 @@
-{% extends 'base.html' %}{% block content %}<h1>Complaints</h1><table class="table bg-white"><tr><th>ID</th><th>Customer</th><th>Category</th><th>Urgency</th><th>Status</th></tr>{% for c in complaints %}<tr><td><a href="{{url_for('complaints.detail',complaint_id=c.complaint_id)}}">{{c.complaint_id}}</a></td><td>{{c.customer_name}}</td><td>{{c.category_name}}</td><td>{{c.urgency}}</td><td>{{c.status}}</td></tr>{% endfor %}</table>{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Complaints · ComplainIQ{% endblock %}
+{% block section %}Complaints{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div><p class="eyebrow">CASE MANAGEMENT</p><h1>Complaints</h1><p>Review, prioritize, and manage submitted customer cases.</p></div>
+  <a class="btn btn-primary" href="{{ url_for('complaints.new') }}">＋&nbsp; New complaint</a>
+</div>
+<section class="table-card">
+  <div class="table-responsive">
+    <table class="table">
+      <thead><tr><th>Case</th><th>Customer</th><th>Category</th><th>Urgency</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
+      <tbody>
+        {% for c in complaints %}
+          <tr>
+            <td><a class="fw-bold" href="{{ url_for('complaints.detail', complaint_id=c.complaint_id) }}">#{{ c.complaint_id }}</a></td>
+            <td class="fw-semibold">{{ c.customer_name }}</td>
+            <td>{{ c.category_name or 'Unclassified' }}</td>
+            <td><span class="severity-badge severity-{{ (c.urgency or 'low')|lower }}">{{ c.urgency or 'Not set' }}</span></td>
+            <td><span class="status-badge status-{{ (c.status or 'open')|lower }}">{{ (c.status or 'OPEN')|replace('_', ' ') }}</span></td>
+            <td class="text-secondary">{{ c.submitted_at }}</td>
+            <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('complaints.detail', complaint_id=c.complaint_id) }}">Review</a></td>
+          </tr>
+        {% else %}
+          <tr><td class="table-empty" colspan="7">No complaints have been submitted yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

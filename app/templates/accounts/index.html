@@ -1,1 +1,33 @@
-{% extends 'base.html' %}{% block content %}<h1>Accounts</h1><form method="post" class="card card-body row g-2 mb-3"><div class="col"><select class="form-select" name="customer_id">{% for c in customers %}<option value="{{c.customer_id}}">{{c.full_name}}</option>{% endfor %}</select></div><div class="col"><select class="form-select" name="type_id">{% for t in types %}<option value="{{t.type_id}}">{{t.type_name}}</option>{% endfor %}</select></div><div class="col"><input class="form-control" name="account_number" placeholder="Account number" required></div><div class="col-auto"><button class="btn btn-primary">Add</button></div></form><table class="table bg-white"><tr><th>Number</th><th>Customer</th><th>Type</th><th>Balance</th><th>Status</th><th></th></tr>{% for a in accounts %}<tr><td>{{a.account_number}}</td><td>{{a.full_name}}</td><td>{{a.type_name}}</td><td>{{'%.2f'|format(a.balance)}}</td><td>{{a.status}}</td><td><form method="post" action="{{url_for('accounts.delete',account_id=a.account_id)}}"><button class="btn btn-sm btn-outline-danger">Delete</button></form></td></tr>{% else %}<tr><td colspan="6">No accounts yet.</td></tr>{% endfor %}</table>{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Accounts · ComplainIQ{% endblock %}
+{% block section %}Accounts{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h1>Accounts</h1><p>View linked customer accounts and current account balances.</p></div></div>
+<section class="form-panel mb-3">
+  <div class="panel-heading"><div><h2>Add an account</h2><p>Link an account number to a customer and account type.</p></div></div>
+  <form method="post" class="row g-3 align-items-end">
+    <div class="col-lg-4 col-md-6"><label class="form-label" for="customer_id">Customer</label><select class="form-select" id="customer_id" name="customer_id">{% for c in customers %}<option value="{{ c.customer_id }}">{{ c.full_name }}</option>{% endfor %}</select></div>
+    <div class="col-lg-3 col-md-6"><label class="form-label" for="type_id">Account type</label><select class="form-select" id="type_id" name="type_id">{% for t in types %}<option value="{{ t.type_id }}">{{ t.type_name }}</option>{% endfor %}</select></div>
+    <div class="col-lg-3 col-md-6"><label class="form-label" for="account_number">Account number</label><input class="form-control" id="account_number" name="account_number" placeholder="Account number" required></div>
+    <div class="col-lg-2 col-md-6"><button class="btn btn-primary w-100">＋ Add account</button></div>
+  </form>
+</section>
+<section class="table-card">
+  <div class="table-responsive">
+    <table class="table">
+      <thead><tr><th>Account number</th><th>Customer</th><th>Type</th><th>Balance</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+      <tbody>
+        {% for a in accounts %}
+          <tr>
+            <td class="fw-bold">{{ a.account_number }}</td><td>{{ a.full_name }}</td><td>{{ a.type_name }}</td><td class="fw-semibold">{{ '%.2f'|format(a.balance) }}</td>
+            <td><span class="status-badge status-{{ (a.status or 'active')|lower }}">{{ a.status }}</span></td>
+            <td class="text-end"><form method="post" action="{{ url_for('accounts.delete', account_id=a.account_id) }}" onsubmit="return confirm('Delete this account?')"><button class="btn btn-sm btn-outline-danger">Delete</button></form></td>
+          </tr>
+        {% else %}
+          <tr><td class="table-empty" colspan="6">No accounts are available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
