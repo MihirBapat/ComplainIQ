@@ -29,7 +29,16 @@ def create_app(test_config=None):
     @app.get("/")
     def index():
         from app.db import query_one, query_all
-        return render_template("home.html", open_count=query_one("SELECT COUNT(*) AS n FROM complaints WHERE status!='RESOLVED'")["n"], flags=query_one("SELECT COUNT(*) AS n FROM fraud_flags WHERE status='PENDING'")["n"], categories=query_all("SELECT * FROM v_category_stats"))
+        stats = {
+            "open_count": query_one("SELECT COUNT(*) AS n FROM complaints WHERE status IN ('OPEN','IN_REVIEW')")["n"],
+            "high_urgency": query_one("SELECT COUNT(*) AS n FROM complaints WHERE urgency='HIGH' AND status!='RESOLVED'")["n"],
+            "flags": query_one("SELECT COUNT(*) AS n FROM fraud_flags WHERE status='PENDING'")["n"],
+            "transactions": query_one("SELECT COUNT(*) AS n FROM transactions")["n"],
+        }
+        return render_template("home.html", stats=stats, categories=query_all("SELECT * FROM v_category_stats"),
+            sentiment=query_all("SELECT COALESCE(sentiment_label,'NEUTRAL') label, COUNT(*) total FROM complaints GROUP BY sentiment_label"),
+            monthly=query_all("SELECT month, SUM(complaint_count) total FROM v_monthly_complaints GROUP BY month ORDER BY month"),
+            recent=query_all("SELECT * FROM v_complaint_overview ORDER BY submitted_at DESC LIMIT 6"))
 
     @app.errorhandler(404)
     def not_found(error):

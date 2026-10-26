@@ -63,3 +63,9 @@
 </section>
 <div class="info-strip mt-3">AI-assisted categories and urgency are triage signals. Staff should review the complaint before making a decision.</div>
 {% endblock %}
+{% block scripts %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script>
+const axis={ticks:{color:'#94a3b8'},grid:{color:'rgba(148,163,184,.12)'}};
+new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:{{ monthly|map(attribute='month')|list|tojson }},datasets:[{data:{{ monthly|map(attribute='total')|list|tojson }},borderColor:'#7c5cff',backgroundColor:'rgba(124,92,255,.16)',fill:true,tension:.38,pointRadius:3}]},options:{plugins:{legend:{display:false}},scales:{x:axis,y:{...axis,beginAtZero:true}}}});
+new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:{{ categories|map(attribute='category_name')|list|tojson }},datasets:[{data:{{ categories|map(attribute='complaint_count')|list|tojson }},backgroundColor:['#7c5cff','#37d5b5','#f5b942','#ef6b73','#5ca8ff'],borderWidth:0}]},options:{plugins:{legend:{labels:{color:'#cbd5e1',boxWidth:10}}},cutout:'70%'}});
+new Chart(document.getElementById('sentimentChart'),{type:'bar',data:{labels:{{ sentiment|map(attribute='label')|list|tojson }},datasets:[{data:{{ sentiment|map(attribute='total')|list|tojson }},backgroundColor:['#ef6b73','#64748b','#37d5b5'],borderRadius:7}]},options:{plugins:{legend:{display:false}},scales:{x:axis,y:{...axis,beginAtZero:true}}}});
+</script>{% endblock %}
